@@ -1,6 +1,6 @@
 # Cairo interface generator
 
-Generate the corrsponding interfaces of your Cairo contracts.
+Generate the interfaces corresponding to your Cairo contracts
 
 ## Dependencies
 - cairo-lang
@@ -14,4 +14,4 @@ Generate the corrsponding interfaces of your Cairo contracts.
 
 ## Example
 `i_main` inside the interfaces directory was generated with this command : 
-```python cairo_interface.py src/main.cairo -o i_main -d interfaces```
+```

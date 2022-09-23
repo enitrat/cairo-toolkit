@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "cairo-interface-generator"
+version = "0.1.0"
+description = "Generate interfaces from your Cairo contracts"
+authors = ["msaug <msaug@protonmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "cairo_interface_generator"}]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+cairo-lang = "^0.10.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+cairo-interface-generator = 'cairo_interface_generator.cli:main'
