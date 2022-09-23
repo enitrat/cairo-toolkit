@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "cairo-interface-generator"
 version = "0.1.0"
-description = "Generate interfaces from your Cairo contracts"
+description = "Generate interfaces for your Cairo contracts"
 authors = ["msaug <msaug@protonmail.com>"]
 license = "MIT"
 readme = "README.md"

@@ -15,3 +15,5 @@ Generate the interfaces corresponding to your Cairo contracts
 ## Example
 `i_main` inside the interfaces directory was generated with this command : 
 ```
+cairo-interface-generator test/main-cairo -d interfaces -o i_main
+```
