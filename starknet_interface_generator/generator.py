@@ -3,7 +3,7 @@ from starkware.cairo.lang.compiler.ast.code_elements import CodeElementFunction,
 from starkware.cairo.lang.compiler.ast.visitor import Visitor
 from starkware.cairo.lang.compiler.ast.types import TypedIdentifier
 
-from cairo_interface_generator.utils import to_camel_case
+from starknet_interface_generator.utils import to_camel_case
 
 
 class Generator(Visitor):

@@ -1,19 +1,23 @@
-# Cairo interface generator
+# Starknet interface generator
 
-Generate the interfaces corresponding to your Cairo contracts
+Generate the interfaces corresponding to your Starknet contracts.
 
 ## Dependencies
+
 - cairo-lang
 
 ## Installation
-`pip install cairo-interface-generator`
+
+`pip install starknet-interface-generator`
 
 ## Usage
-```python cairo_interface.py file_path [-d output_directory] [-o filename]```
 
+`starknet-interface-generator file_path [-d output_directory] [-o filename]`
 
 ## Example
-`i_main` inside the interfaces directory was generated with this command : 
+
+`i_main` inside the interfaces directory was generated with this command :
+
 ```
-cairo-interface-generator test/main-cairo -d interfaces -o i_main
+starknet-interface-generator test/main-cairo -d interfaces -o i_main
 ```

@@ -7,7 +7,7 @@ from starkware.cairo.lang.compiler.ast.module import CairoFile, CairoModule
 from starkware.cairo.lang.compiler.parser import parse_file
 from starkware.cairo.lang.version import __version__
 
-from cairo_interface_generator.generator import Generator
+from starknet_interface_generator.generator import Generator
 
 
 def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], description: str):
@@ -51,6 +51,7 @@ def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], des
             print(exc, file=sys.stderr)
             return 2
 
+        print(f"Generating interface {newpath}")
         open(newpath, "w").write(formatted_interface)
 
     return 0
