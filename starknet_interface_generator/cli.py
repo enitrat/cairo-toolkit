@@ -49,7 +49,7 @@ def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], des
 
         except Exception as exc:
             print(exc, file=sys.stderr)
-            return 2
+            return 1
 
         print(f"Generating interface {newpath}")
         open(newpath, "w").write(formatted_interface)
