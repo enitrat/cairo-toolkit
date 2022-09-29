@@ -2,7 +2,7 @@ from starkware.cairo.lang.compiler.ast.code_elements import CodeElementFunction,
 from starkware.cairo.lang.compiler.ast.visitor import Visitor
 from starkware.cairo.lang.compiler.ast.types import TypedIdentifier
 
-from starknet_interface_generator.utils import to_camel_case
+from src.starknet_interface_generator.utils import to_camel_case
 
 
 class Generator(Visitor):
@@ -10,8 +10,9 @@ class Generator(Visitor):
     Generates an interface from a Cairo contract.
     """
 
-    def __init__(self, contract_name: str):
+    def __init__(self, contract_dir: str, contract_name: str):
         super().__init__()
+        self.contract_dir = contract_dir
         self.contract_name = contract_name
         self.imports = {}
         self.required_import_paths = []
@@ -50,8 +51,10 @@ class Generator(Visitor):
 
         # func arguments
         for i, arg in enumerate(elm.arguments.identifiers):
-            if arg.expr_type.format().replace('*', '') != 'felt':
-                self.add_import_path(arg)
+            arg_type = arg.expr_type.format().replace('*', '')
+            # non-felt types need to be imported
+            if arg_type != 'felt':
+                self.add_import_path(arg_type)
 
             fn_signature += f"{arg.format()}"
             if i != len(elm.arguments.identifiers) - 1:
@@ -66,11 +69,13 @@ class Generator(Visitor):
 
         self.functions += fn_signature
 
-    def add_import_path(self, type: TypedIdentifier):
+    def add_import_path(self, arg_type: str):
         # If we have imported types, we need to add the import path to our interface
         # If we use namespace, we want to import the namespace and not the type itself.
-        import_name = type.expr_type.format().split('.')[0]
-        import_path = self.imports[import_name]
+        # if the type comes from a namespace, we only import the namespace
+        import_name = arg_type.split('.')[0]
+        import_path = self.imports.get(
+            import_name) or f"{self.contract_dir.replace('/', '.')}.{self.contract_name}"  # this is a bad practice, when the type is directly declared in the contract.
         import_statement = f"from {import_path} import {import_name}\n"
         if import_statement in self.required_import_paths:
             return

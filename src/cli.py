@@ -2,6 +2,7 @@ import argparse
 import sys
 import os
 import toml
+import traceback
 
 from typing import Callable
 
@@ -9,7 +10,7 @@ from starkware.cairo.lang.compiler.ast.module import CairoFile, CairoModule
 from starkware.cairo.lang.compiler.parser import parse_file
 from starkware.cairo.lang.version import __version__
 
-from starknet_interface_generator.generator import Generator
+from src.starknet_interface_generator.generator import Generator
 
 
 def get_contracts_from_protostar(protostar_path: str):
@@ -50,7 +51,7 @@ def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], des
                 module_name=path,
             )
 
-            generator = Generator(contract_name)
+            generator = Generator(dirpath, contract_name)
             contract_interface_str = generator.generate_contract_interface(
                 contract)
 
@@ -62,7 +63,7 @@ def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], des
             formatted_interface = contract_interface.format()
 
         except Exception as exc:
-            print(exc, file=sys.stderr)
+            print(traceback.format_exc())
             return 1
 
         print(f"Generating interface {newpath}")
