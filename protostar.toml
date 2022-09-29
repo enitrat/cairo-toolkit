@@ -1,0 +1,13 @@
+["protostar.config"]
+protostar_version = "0.4.2"
+
+["protostar.project"]
+libs_path = "lib"
+
+["protostar.contracts"]
+main = [
+    "test/main.cairo",
+]
+second_contract = [
+    "test/second_contract.cairo",
+]

@@ -51,7 +51,7 @@ class Generator(Visitor):
 
         # func arguments
         for i, arg in enumerate(elm.arguments.identifiers):
-            if arg.expr_type.format() != 'felt':
+            if arg.expr_type.format().replace('*', '') != 'felt':
                 self.add_import_path(arg)
 
             fn_signature += f"{arg.format()}"
@@ -69,9 +69,10 @@ class Generator(Visitor):
 
     def add_import_path(self, type: TypedIdentifier):
         # If we have imported types, we need to add the import path to our interface
-        import_name = type.expr_type.format()
+        # If we use namespace, we want to import the namespace and not the type itself.
+        import_name = type.expr_type.format().split('.')[0]
         import_path = self.imports[import_name]
-        import_statement = f"from {import_path} import {type.expr_type.format()}\n"
+        import_statement = f"from {import_path} import {import_name}\n"
         if import_statement in self.required_import_paths:
             return
         self.required_import_paths.append(import_statement)

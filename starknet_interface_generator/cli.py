@@ -1,6 +1,9 @@
 import argparse
 import sys
 import os
+import toml
+import traceback
+
 from typing import Callable
 
 from starkware.cairo.lang.compiler.ast.module import CairoFile, CairoModule
@@ -10,22 +13,34 @@ from starkware.cairo.lang.version import __version__
 from starknet_interface_generator.generator import Generator
 
 
+def get_contracts_from_protostar(protostar_path: str):
+    config = toml.load(protostar_path)
+    contracts = config['protostar.contracts']
+    contracts_paths = [contract[0] for contract in contracts.values()]
+    return contracts_paths
+
+
 def cairo_interface_generator(cairo_parser: Callable[[str, str], CairoFile], description: str):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("-v", "--version", action="version",
                         version=f"%(prog)s {__version__}")
     parser.add_argument("files", metavar="file", type=str,
-                        nargs="+", help="File names")
+                        nargs="*", help="File names")
+    parser.add_argument("--protostar", action='store_true')
     parser.add_argument("-d", "--directory", type=str)
-    parser.add_argument("-o", "--output", type=str)
-
     args = parser.parse_args()
 
-    for path in args.files:
+    if args.protostar:
+        protostar_path = os.path.join(os.getcwd(), "protostar.toml")
+        files = get_contracts_from_protostar(protostar_path)
+    else:
+        files = args.files
+
+    for path in files:
         contract_file = open(path).read()
         dirpath, filename = os.path.split(path)
         contract_name = filename.split(".")[0]
-        newfilename = f"{args.output}.cairo" if args.output else "i_" + filename
+        newfilename = f"i_" + filename
         newpath = os.path.join(args.directory or dirpath, newfilename)
 
         try:
