@@ -12,7 +12,7 @@ Generate the interfaces corresponding to your Starknet contracts.
 
 ## Usage
 
-`starknet-interface-generator file_path [-d output_directory] [-o filename]`
+`starknet-interface-generator [file_path] [-d output_directory] [--protostar] `
 
 ## Example
 

@@ -2,7 +2,6 @@ import argparse
 import sys
 import os
 import toml
-import traceback
 
 from typing import Callable
 

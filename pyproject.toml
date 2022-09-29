@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starknet-interface-generator"
-version = "0.1.1"
+version = "0.1.2"
 description = "Generate interfaces for your Starknet contracts"
 authors = ["msaug <msaug@protonmail.com>"]
 license = "MIT"
@@ -10,6 +10,7 @@ packages = [{include = "starknet_interface_generator"}]
 [tool.poetry.dependencies]
 python = "^3.7"
 cairo-lang = "^0.10.0"
+toml = "0.10.2"
 
 
 [build-system]
