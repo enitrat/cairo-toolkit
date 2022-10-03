@@ -16,7 +16,7 @@ def cli():
 
 
 @click.command()
-@click.option("--files", multiple=True, default=[], help="File paths")
+@click.option("--files", 'f', multiple=True, default=[], help="File paths")
 @click.option('--protostar', '-p', is_flag=True, help='Uses `protostar.toml` to get file paths')
 @click.option('--directory', '-d', help='Output directory for the interfaces. If unspecified, they will be created in the same directory as the contracts')
 def generate(protostar: bool, directory: str, files: List[str]):
