@@ -8,6 +8,3 @@ libs_path = "lib"
 main = [
     "test/main.cairo",
 ]
-second_contract = [
-    "test/second_contract.cairo",
-]

@@ -1,0 +1,3 @@
+struct ImportedStruct {
+    index: felt,
+}
