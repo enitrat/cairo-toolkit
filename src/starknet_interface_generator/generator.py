@@ -1,7 +1,7 @@
 from starkware.cairo.lang.compiler.ast.code_elements import CodeElementFunction, CodeBlock, CodeElementImport
 from starkware.cairo.lang.compiler.ast.visitor import Visitor
 
-from src.utils import to_camel_case
+from starknet_interface_generator.utils import to_camel_case
 
 
 class Generator(Visitor):
@@ -21,7 +21,7 @@ class Generator(Visitor):
         self.visit(module)
         interface = \
             "%lang starknet\n\n" + \
-            "\n".join(self.required_import_paths) + "\n" \
+            "\n".join(self.required_import_paths) + "\n\n" \
             "@contract_interface\n" + \
             f"namespace I{to_camel_case(self.contract_name)}{{\n" \
             f"{self.functions} \n" \
@@ -37,7 +37,7 @@ class Generator(Visitor):
                 for item in imported_items:
                     self.imports[item.orig_identifier.name] = path
 
-    def parse_functions(self, elm: CodeElementFunction):
+    def parse_function_signature(self, elm: CodeElementFunction):
         # We only visit proper functions decorated with 'external' or 'view'.
         need_instrumentation = any(decorator.name in [
                                    "external", "view"] for decorator in elm.decorators)
@@ -64,6 +64,14 @@ class Generator(Visitor):
         if elm.returns != None:
             fn_signature += " -> "
             fn_signature += elm.returns.format()
+
+            # non-felt return types need to be imported
+            return_elems = elm.returns.get_children()
+            for elem in return_elems:
+                type = elem.typ.format().replace('*', '')
+                if type != 'felt':
+                    self.add_import_path(type)
+
         fn_signature += "{\n}\n\n"
 
         self.functions += fn_signature
@@ -75,7 +83,7 @@ class Generator(Visitor):
         import_name = arg_type.split('.')[0]
         import_path = self.imports.get(
             import_name) or f"{self.contract_dir.replace('/', '.')}.{self.contract_name}"  # this is a bad practice, when the type is directly declared in the contract.
-        import_statement = f"from {import_path} import {import_name}\n"
+        import_statement = f"from {import_path} import {import_name}"
         if import_statement in self.required_import_paths:
             return
         self.required_import_paths.append(import_statement)
@@ -85,7 +93,7 @@ class Generator(Visitor):
         return obj
 
     def visit_CodeElementFunction(self, elm: CodeElementFunction):
-        self.parse_functions(elm)
+        self.parse_function_signature(elm)
         return super().visit_CodeElementFunction(elm)
 
     def visit_CodeBlock(self, elm: CodeBlock):

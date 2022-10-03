@@ -10,7 +10,7 @@ class InterfaceParser(Visitor):
     def __init__(self, contract_name: str):
         super().__init__()
         self.contract_name = contract_name
-        self.imports = {}  # map import_name => path
+        self.imports = {}  # map import_name => import_path
         # list of required import statements for the interface
         self.required_import_paths = []
         self.functions = {}  # TODO should be a list
@@ -52,12 +52,15 @@ class InterfaceParser(Visitor):
         fn_params = []
         fn_returns = []
         # func arguments
-        for i, arg in enumerate(elm.arguments.identifiers):
+        for arg in elm.arguments.identifiers:
             fn_params.append(arg.format())
 
         # func return values
         if elm.returns != None:
-            fn_returns.append(elm.returns.format())
+            return_elems = elm.returns.get_children()
+            for elem in return_elems:
+                str = f"{elem.name}: {elem.typ.format()}"
+                fn_returns.append(str)
 
         self.functions[elm.name] = {'params': fn_params, 'returns': fn_returns}
 

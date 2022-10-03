@@ -1,3 +1,4 @@
 dist
 build
 src/__pycache__
+src/starknet_interface_generator/__pycache__
