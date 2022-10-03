@@ -1,8 +1,7 @@
 from starkware.cairo.lang.compiler.ast.code_elements import CodeElementFunction, CodeBlock, CodeElementImport
 from starkware.cairo.lang.compiler.ast.visitor import Visitor
-from starkware.cairo.lang.compiler.ast.types import TypedIdentifier
 
-from src.starknet_interface_generator.utils import to_camel_case
+from src.utils import to_camel_case
 
 
 class Generator(Visitor):
