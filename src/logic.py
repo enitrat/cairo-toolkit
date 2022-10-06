@@ -17,7 +17,7 @@ def cairo_parser(code, filename): return parse_file(
 def print_version(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
-    click.echo('Version 0.1.4')
+    click.echo('Version 0.1.5')
     ctx.exit()
 
 
@@ -54,6 +54,7 @@ def generate_interfaces(directory: str, files: List[str]):
 
         print(f"Generating interface {newpath}")
         open(newpath, "w").write(formatted_interface)
+    return 0
 
 
 def check_files(directory, files):
@@ -157,11 +158,13 @@ def check_files(directory, files):
         except Exception as exc:
             print(traceback.format_exc())
             return 1
+
     print('\n'.join(str(x) for x in errors))
     try:
         assert len(errors) == 0
     except:
         return 1
+    return 0
 
 
 def get_contracts_from_protostar(protostar_path: str):

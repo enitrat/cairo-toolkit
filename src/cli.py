@@ -16,7 +16,7 @@ def cli():
 
 
 @click.command()
-@click.option("--files", 'f', multiple=True, default=[], help="File paths")
+@click.option("--files", '-f', multiple=True, default=[], help="File paths")
 @click.option('--protostar', '-p', is_flag=True, help='Uses `protostar.toml` to get file paths')
 @click.option('--directory', '-d', help='Output directory for the interfaces. If unspecified, they will be created in the same directory as the contracts')
 def generate(protostar: bool, directory: str, files: List[str]):
@@ -24,8 +24,7 @@ def generate(protostar: bool, directory: str, files: List[str]):
         protostar_path = os.path.join(os.getcwd(), "protostar.toml")
         files = get_contracts_from_protostar(protostar_path)
 
-    generate_interfaces(directory, files)
-    return 0
+    sys.exit(generate_interfaces(directory, files))
 
 
 @click.command()
@@ -36,8 +35,7 @@ def check(protostar: bool, directory: str, files: List[str]):
     if protostar:
         protostar_path = os.path.join(os.getcwd(), "protostar.toml")
         files = get_contracts_from_protostar(protostar_path)
-    check_files(directory, files)
-    return 0
+    sys.exit(check_files(directory, files))
 
 
 cli.add_command(generate)
