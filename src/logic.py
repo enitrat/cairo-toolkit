@@ -68,16 +68,16 @@ def generate_ordered_imports(directory: str, files: List[str]):
                 cairo_file=cairo_parser(contract_file, filename),
                 module_name=path,
             )
-            order_imports = OrderImports().create_ordered_imports(contract)
+            contract_ordered = OrderImports(["starkware", "openzeppelin"]).create_ordered_imports(contract)
+            print(contract_ordered.cairo_file.format())
+            # contract_ordered_formatted = contract_ordered.format()
 
-            subprocess.call(['sed','-i','/.*import.*/d', path])
-            insert_line = f'2 i {order_imports}'
-            subprocess.call(["sed","-i", f"{insert_line}", path])
         
         except Exception as exc:
             print(traceback.format_exc())
             return 1
 
+        # open(path, "w").write(contract_ordered)
     return 0
 
 def check_files(directory, files):
