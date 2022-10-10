@@ -40,11 +40,7 @@ def check(protostar: bool, directory: str, files: List[str]):
 
 @click.command()
 @click.option("--files", '-f', multiple=True, default=[], help="File paths")
-@click.option('--directory', '-d', help='Output directory for the interfaces. If unspecified, they will be created in the same directory as the contracts')
 def order_imports(directory: str, files: List[str]):
-    # if protostar:
-    #     protostar_path = os.path.join(os.getcwd(), "protostar.toml")
-    #     files = get_contracts_from_protostar(protostar_path)
 
     sys.exit(generate_ordered_imports(directory, files))
 

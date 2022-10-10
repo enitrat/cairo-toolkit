@@ -37,6 +37,16 @@ Options:
   --help                Show this message and exit.
 ```
 
+### Ordering imports in existing file
+
+```
+starknet-interface-generator order-imports [OPTIONS]
+
+Options:
+  --files TEXT          Contract to order imports in
+  --help                Show this message and exit.
+```
+
 ## Example
 
 Generate interfaces for the contracts in `contracts/` and put them in `interfaces/`:
