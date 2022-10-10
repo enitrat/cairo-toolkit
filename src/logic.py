@@ -69,8 +69,7 @@ def generate_ordered_imports(directory: str, files: List[str]):
                 module_name=path,
             )
             contract_ordered = OrderImports(["starkware", "openzeppelin"]).create_ordered_imports(contract)
-            print(contract_ordered.cairo_file.format())
-            # contract_ordered_formatted = contract_ordered.format()
+            # TODO: Cairo module seems ok, but can't run .format() method on it
 
         
         except Exception as exc:
