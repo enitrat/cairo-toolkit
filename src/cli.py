@@ -39,12 +39,22 @@ def check(protostar: bool, directory: str, files: List[str]):
 
 # this command may be run with:
 # python src/cli.py order-imports -f test/main_imports_test.cairo -i starkware -i openzeppelin
+# python src/cli.py order-imports -d test/ -i starkware -i openzeppelin
 @click.command()
+@click.option('--directory', '-d', help="Directory with cairo files to format")
 @click.option("--files", '-f', multiple=True, default=[], help="File paths")
 @click.option("--imports", '-i', multiple=True, default=["starkware", "openzeppelin"], help="Imports order")
-def order_imports(files: List[str], imports: List[str]):
+def order_imports(directory: str, files: List[str], imports: List[str]):
+    files_to_order = []
+    if len(directory) > 0:
+        path = os.path.join(os.getcwd(), directory)
+        for (root,_,cairo_files) in os.walk(path, topdown=True):
+            for f in cairo_files:
+                files_to_order.append(os.path.join(root, f))
+    else:
+        files_to_order = files
 
-    sys.exit(generate_ordered_imports(files, imports))
+    sys.exit(generate_ordered_imports(files_to_order, imports))
 
 cli.add_command(generate)
 cli.add_command(check)
