@@ -37,12 +37,14 @@ def check(protostar: bool, directory: str, files: List[str]):
         files = get_contracts_from_protostar(protostar_path)
     sys.exit(check_files(directory, files))
 
-
+# this command may be run with:
+# python src/cli.py order-imports -f test/main_imports_test.cairo -i starkware -i openzeppelin
 @click.command()
 @click.option("--files", '-f', multiple=True, default=[], help="File paths")
-def order_imports(directory: str, files: List[str]):
+@click.option("--imports", '-i', multiple=True, default=["starkware", "openzeppelin"], help="Imports order")
+def order_imports(files: List[str], imports: List[str]):
 
-    sys.exit(generate_ordered_imports(directory, files))
+    sys.exit(generate_ordered_imports(files, imports))
 
 cli.add_command(generate)
 cli.add_command(check)

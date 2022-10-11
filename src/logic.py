@@ -57,7 +57,7 @@ def generate_interfaces(directory: str, files: List[str]):
         open(newpath, "w").write(formatted_interface)
     return 0
 
-def generate_ordered_imports(directory: str, files: List[str]):
+def generate_ordered_imports(files: List[str], imports: List[str]):
     for path in files:
         contract_file = open(path).read()
         _, filename = os.path.split(path)
@@ -68,15 +68,14 @@ def generate_ordered_imports(directory: str, files: List[str]):
                 cairo_file=cairo_parser(contract_file, filename),
                 module_name=path,
             )
-            contract_ordered = OrderImports(["starkware", "openzeppelin"]).create_ordered_imports(contract)
-            # TODO: Cairo module seems ok, but can't run .format() method on it
-
+            OrderImports([*imports]).create_ordered_imports(contract)
+            contract = contract.format()
         
         except Exception as exc:
             print(traceback.format_exc())
             return 1
 
-        # open(path, "w").write(contract_ordered)
+        open(path, "w").write(contract)
     return 0
 
 def check_files(directory, files):
