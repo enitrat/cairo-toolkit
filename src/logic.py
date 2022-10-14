@@ -3,12 +3,13 @@ from typing import Dict, List
 import click
 import toml
 import os
+import subprocess 
 from starkware.cairo.lang.compiler.ast.module import CairoModule
 from starkware.cairo.lang.compiler.parser import parse_file
 
 from starknet_interface_generator.generator import Generator
 from starknet_interface_generator.interface_parser import InterfaceParser
-
+from starknet_interface_generator.order_imports import OrderImports
 
 def cairo_parser(code, filename): return parse_file(
     code=code, filename=filename)
@@ -56,6 +57,26 @@ def generate_interfaces(directory: str, files: List[str]):
         open(newpath, "w").write(formatted_interface)
     return 0
 
+def generate_ordered_imports(files: List[str], imports: List[str]):
+    for path in files:
+        contract_file = open(path).read()
+        _, filename = os.path.split(path)
+
+        try:
+            # Generate the AST of the cairo contract, visit it and generate the interface
+            contract = CairoModule(
+                cairo_file=cairo_parser(contract_file, filename),
+                module_name=path,
+            )
+            OrderImports([*imports]).create_ordered_imports(contract)
+            contract = contract.format()
+        
+        except Exception as exc:
+            print(traceback.format_exc())
+            return 1
+
+        open(path, "w").write(contract)
+    return 0
 
 def check_files(directory, files):
     errors = []
