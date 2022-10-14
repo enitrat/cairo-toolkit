@@ -46,7 +46,7 @@ def check(protostar: bool, directory: str, files: List[str]):
 @click.option("--imports", '-i', multiple=True, default=["starkware", "openzeppelin"], help="Imports order")
 def order_imports(directory: str, files: List[str], imports: List[str]):
     files_to_order = []
-    if len(directory) > 0:
+    if directory:
         path = os.path.join(os.getcwd(), directory)
         for (root,_,cairo_files) in os.walk(path, topdown=True):
             for f in cairo_files:

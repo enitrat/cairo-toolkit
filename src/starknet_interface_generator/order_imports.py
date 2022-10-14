@@ -2,7 +2,8 @@ from multiprocessing import allow_connection_pickling
 from symbol import import_name
 from typing import List, Dict
 from collections import OrderedDict
-from starkware.cairo.lang.compiler.ast.code_elements import CodeBlock, CodeElementImport, CodeElementEmptyLine, CommentedCodeElement
+from numpy import isin
+from starkware.cairo.lang.compiler.ast.code_elements import CodeBlock, CodeElementImport, CodeElementEmptyLine, CommentedCodeElement, CodeElementDirective
 from starkware.cairo.lang.compiler.ast.visitor import Visitor
 
 class OrderImports(Visitor):
@@ -22,19 +23,21 @@ class OrderImports(Visitor):
         return self.extract_imports(elm)
     
     def extract_imports(self, elm):
-        empty_element = self.get_empty_element()
-        all_imports: Dict[str, List] = OrderedDict()
-
-        all_imports = {x: [empty_element] for x in self.import_order_names}
         code_elements = elm.code_elements
-            
+        all_imports: Dict[str, List] = OrderedDict()
+        all_imports = {x: [] for x in self.import_order_names}
+        first_occurance_of_import = -1
         for i, x in enumerate(code_elements):
             if isinstance(x.code_elm, CodeElementImport):
+                if first_occurance_of_import == -1:
+                    first_occurance_of_import = i
+                # order the import_items
+                x.code_elm.import_items.sort(key=lambda x: x.orig_identifier.name)
                 import_first_word = x.code_elm.path.name.split(".")[0]
                 # group additional elements if not specified in initial list
                 if import_first_word not in self.import_order_names:
                     self.import_order_names.append(import_first_word)
-                    all_imports[import_first_word] = [empty_element]
+                    all_imports[import_first_word] = []
                 for import_order_name in self.import_order_names:
                     if (import_order_name == x.code_elm.path.name.split(".")[0]):
                         all_imports[import_order_name].append(x)
@@ -44,8 +47,9 @@ class OrderImports(Visitor):
         
         ordered_imports = []
         for _, v in all_imports.items():
-            ordered_imports += v
-        elm.code_elements = [code_elements[0]] + ordered_imports + code_elements[1:]
+            v.sort(key=lambda x: x.code_elm.path.name)
+            ordered_imports += [self.get_empty_element()] + v
+        elm.code_elements = code_elements[:first_occurance_of_import] + ordered_imports + code_elements[first_occurance_of_import:]
     
     def get_empty_element(self):
         return CommentedCodeElement(code_elm=CodeElementEmptyLine(), comment=None, location=None)
