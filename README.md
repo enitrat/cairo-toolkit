@@ -1,22 +1,36 @@
-# Starknet interface generator
+# Cairo-toolkit
 
-Generate / check the interfaces corresponding to your Starknet contracts.
+A set of useful tools for cairo / starknet development.
+
+- Generate / check the interfaces corresponding to your Starknet contracts.
+- Easily order your imports
 
 ## Installation
 
-`pip install starknet-interface-generator`
+`pip install cairo-toolkit`
 
 ## Usage
 
-Options :
+```
+cairo-toolkit [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version
+  --help     Show this message and exit.
+
+Commands:
+  check-interface
+  generate-interface
+  order-imports
+```
 
 ### Generate interfaces
 
 ```
-Usage: starknet-interface-generator generate [OPTIONS]
+Usage: cairo-toolkit generate-interface [OPTIONS]
 
 Options:
-  --files TEXT          File paths
+  -f, --files TEXT      File paths
   -p, --protostar       Uses `protostar.toml` to get file paths
   -d, --directory TEXT  Output directory for the interfaces. If unspecified,
                         they will be created in the same directory as the
@@ -27,7 +41,7 @@ Options:
 ### Check existing interfaces
 
 ```
-starknet-interface-generator check [OPTIONS]
+Usage: cairo-toolkit check-interface [OPTIONS]
 
 Options:
   --files TEXT          Contracts to check
@@ -40,10 +54,12 @@ Options:
 ### Ordering imports in existing file
 
 ```
-starknet-interface-generator order-imports [OPTIONS]
+Usage: cairo-toolkit order-imports [OPTIONS]
 
 Options:
-  --files TEXT          Contract to order imports in
+  -d, --directory TEXT  Directory with cairo files to format
+  -f, --files TEXT      File paths
+  -i, --imports TEXT    Imports order
   --help                Show this message and exit.
 ```
 
@@ -52,19 +68,23 @@ Options:
 Generate interfaces for the contracts in `contracts/` and put them in `interfaces/`:
 
 ```
-find contracts/ -iname '*.cairo' -exec starknet-interface-generator generate --files {} \;
+find contracts/ -iname '*.cairo' -exec cairo-toolkit generate-interface --files {} \;
 ```
 
 Check the interface for `test/main.cairo` against the interface `i_main.cairo` in interfaces/:
 
 ```
-starknet-interface-generator check --files test/main.cairo -d interfaces
+cairo-toolkit check-interface --files test/main.cairo -d interfaces
+```
+
+Order imports for all cairo files under `test`
+
+```
+cairo-toolkit order-imports -d test
 ```
 
 ## Protostar
 
-You can use starknet-interface-generator in a protostar project.
+You can use cairo-toolkit in a protostar project.
 This can be paired with a github action to automatically generate the interfaces for the contracts
 that specified inside the `protostar.toml` file.
-
-`starknet-interface-generator [generate||check] --protostar`

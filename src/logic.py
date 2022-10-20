@@ -7,9 +7,9 @@ import subprocess
 from starkware.cairo.lang.compiler.ast.module import CairoModule
 from starkware.cairo.lang.compiler.parser import parse_file
 
-from starknet_interface_generator.generator import Generator
-from starknet_interface_generator.interface_parser import InterfaceParser
-from starknet_interface_generator.order_imports import OrderImports
+from cairo_toolkit.generator import Generator
+from cairo_toolkit.interface_parser import InterfaceParser
+from cairo_toolkit.order_imports import OrderImports
 
 def cairo_parser(code, filename): return parse_file(
     code=code, filename=filename)

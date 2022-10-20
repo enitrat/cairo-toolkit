@@ -1,4 +1,4 @@
 dist
 build
 src/__pycache__
-src/starknet_interface_generator/__pycache__
+src/cairo_toolkit/__pycache__
