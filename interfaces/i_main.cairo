@@ -12,4 +12,10 @@ namespace IMain {
         res_len: felt, res: felt*, arr_len: felt, arr: ImportedStruct*
     ) {
     }
+
+    func tuple_in_signature(tuple: (felt, felt)) {
+    }
+
+    func implicit_type(untyped_arg) {
+    }
 }

@@ -26,6 +26,18 @@ func struct_ptr_in_return{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_
     return (1, new (1), 1, new ImportedStruct(0));
 }
 
+@view
+func tuple_in_signature{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
+    tuple: (felt, felt)
+) {
+    return ();
+}
+
+@view
+func implicit_type{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(untyped_arg) {
+    return ();
+}
+
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
     return ();

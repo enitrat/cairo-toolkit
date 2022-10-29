@@ -50,10 +50,13 @@ class Generator(Visitor):
 
         # func arguments
         for i, arg in enumerate(elm.arguments.identifiers):
-            arg_type = arg.expr_type.format().replace('*', '')
-            # non-felt types need to be imported
-            if arg_type != 'felt':
-                self.add_import_path(arg_type)
+            arg_type = ''
+            if (arg.expr_type == None):
+                arg_type = 'felt'
+            else:
+                arg_type = arg.expr_type.format().replace('*', '')
+
+            self.parse_type(arg_type)
 
             fn_signature += f"{arg.format()}"
             if i != len(elm.arguments.identifiers) - 1:
@@ -75,6 +78,19 @@ class Generator(Visitor):
         fn_signature += "{\n}\n\n"
 
         self.functions += fn_signature
+
+    def parse_type(self, type: str):
+        type = type.replace('*', '')
+        if ('(' in type):
+            type = type.replace('(', '')
+            type = type.replace(')', '')
+            tuple = type.split(',')
+            for tuple_type in tuple:
+                stripped = tuple_type.strip()
+                self.parse_type(stripped)
+        # non-felt types need to be imported
+        elif type != 'felt':
+            self.add_import_path(type)
 
     def add_import_path(self, arg_type: str):
         # If we have imported types, we need to add the import path to our interface

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cairo-toolkit"
-version = "1.0.0"
+version = "1.0.1"
 description = "A set of useful tools for cairo / starknet development."
 authors = ["msaug <msaug@protonmail.com>"]
 license = "MIT"
@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "cairo_toolkit", from = "src"},{include="src"}]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.9"
 cairo-lang = "^0.10.0"
 toml = "0.10.2"
 click = "8.1.3"
